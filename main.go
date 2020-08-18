@@ -5,9 +5,10 @@ import (
 	"io/ioutil"
 	"os"
 
+	"protoc-gen-tds_twirp/generator"
+
 	"github.com/golang/protobuf/proto"
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
-	"go.larrymyers.com/protoc-gen-twirp_typescript/generator"
 )
 
 func main() {

@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"strings"
 
+	"protoc-gen-tds_twirp/generator/minimal"
+	"protoc-gen-tds_twirp/generator/pbjs"
+
 	"github.com/golang/protobuf/protoc-gen-go/descriptor"
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
-	"go.larrymyers.com/protoc-gen-twirp_typescript/generator/minimal"
-	"go.larrymyers.com/protoc-gen-twirp_typescript/generator/pbjs"
 )
 
 func GetParameters(in *plugin.CodeGeneratorRequest) map[string]string {

@@ -1,4 +1,6 @@
-module go.larrymyers.com/protoc-gen-twirp_typescript
+module protoc-gen-tds_twirp
+
+go 1.14
 
 require (
 	github.com/golang/protobuf v1.2.0
