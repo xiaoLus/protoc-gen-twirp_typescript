@@ -39,8 +39,6 @@ export const createTwirpRequest = (url: string, body: object): Request => {
     });
 };
 
-console.log('test twirp_common.go template')
-
 export type Fetch = (input: RequestInfo, init?: RequestInit) => Promise<Response>;
 `
 	cf := &plugin.CodeGeneratorResponse_File{}

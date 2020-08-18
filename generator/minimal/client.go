@@ -14,7 +14,7 @@ import (
 )
 
 const apiTemplate = `
-import {createTwirpRequest, throwTwirpError, Fetch} from './twirp';
+import { AxiosInstance } from 'axios';
 
 {{range .Models}}
 {{- if not .Primitive}}
@@ -63,31 +63,24 @@ export interface {{.Name}} {
 }
 
 export class Default{{.Name}} implements {{.Name}} {
-    private hostname: string;
-    private fetch: Fetch;
-    private writeCamelCase: boolean;
-    private pathPrefix = "{{$twirpPrefix}}/{{.Package}}.{{.Name}}/";
+		private writeCamelCase: boolean;
+		private axios: AxiosInstance;
+    private pathPrefix = "{{.Package}}.{{.Name}}/";
 
-    constructor(hostname: string, fetch: Fetch, writeCamelCase = false) {
-        this.hostname = hostname;
-        this.fetch = fetch;
-        this.writeCamelCase = writeCamelCase;
+    constructor(axios: AxiosInstance, writeCamelCase = false) {
+				this.writeCamelCase = writeCamelCase;
+				this.axios = axios;
     }
 
     {{- range .Methods}}
     {{.Name}}({{.InputArg}}: {{.InputType}}): Promise<{{.OutputType}}> {
-        const url = this.hostname + this.pathPrefix + "{{.Path}}";
         let body: {{.InputType}} | {{.InputType}}JSON = {{.InputArg}};
         if (!this.writeCamelCase) {
             body = {{.InputType}}ToJSON({{.InputArg}});
         }
-        return this.fetch(createTwirpRequest(url, body)).then((resp) => {
-            if (!resp.ok) {
-                return throwTwirpError(resp);
-            }
-
-            return resp.json().then(JSONTo{{.OutputType}});
-        });
+				const url = this.pathPrefix + "{{.Path}}";
+				return this.axios.post(url, {{.InputArg}})
+				
     }
     {{end}}
 }
@@ -326,7 +319,7 @@ func (g *Generator) Generate(d *descriptor.FileDescriptorProto) ([]*plugin.CodeG
 	clientAPI.Content = proto.String(b.String())
 
 	files = append(files, clientAPI)
-	files = append(files, RuntimeLibrary())
+	// files = append(files, RuntimeLibrary())
 
 	if pkgName, ok := g.params["package_name"]; ok {
 		idx, err := CreatePackageIndex(files)
